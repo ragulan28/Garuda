@@ -12,6 +12,7 @@ import {SigninPage} from "../pages/signin/signin";
 import {TrackingPage} from "../pages/tracking/tracking";
 import {MqttModule, MqttService, MqttServiceOptions} from "ngx-mqtt";
 import {HttpClientModule} from "@angular/common/http";
+import {AndroidFullScreen} from "@ionic-native/android-full-screen";
 
 
 export const MQTT_SERVICE_OPTIONS: MqttServiceOptions = {
@@ -59,6 +60,7 @@ export function mqttServiceFactory() {
     SplashScreen,
     UserProvider,
     VehicleProvider,
+    AndroidFullScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

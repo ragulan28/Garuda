@@ -86,4 +86,5 @@
         <variable name="API_KEY_FOR_IOS" value="AIzaSyDlxhTHbhKrM8zvvVBBWX5p9bXyxtklbSk" />
     </plugin>
     <engine name="android" spec="7.0.0" />
+    <plugin name="cordova-plugin-fullscreen" spec="^1.2.0" />
 </widget>

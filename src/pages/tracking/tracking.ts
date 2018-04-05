@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {LoadingController, NavController, NavParams} from 'ionic-angular';
 import {VehicleLocation} from "../../models/vehicleLocation";
 import {MqttMessage, MqttService} from "ngx-mqtt";
 import {GoogleMap, GoogleMaps, GoogleMapsEvent} from "@ionic-native/google-maps";
 import {VehicleProvider} from "../../providers/vehicle/vehicle";
+import {AndroidFullScreen} from "@ionic-native/android-full-screen";
 
 const CAMERA_DEFAULT_LAT = 6.974159;
 const CAMERA_DEFAULT_LONG = 79.9166422;
@@ -27,13 +28,17 @@ export class TrackingPage {
   constructor(public navCtrl: NavController,
               public vehicleProvider: VehicleProvider,
               public navParams: NavParams,
-              private _mqttService: MqttService) {
+              public loader: LoadingController,
+              private _mqttService: MqttService,private androidFullScreen: AndroidFullScreen) {
     this.parameter = this.navParams.get('location');
 
   }
 
 
   ionViewDidEnter() {
+    this.androidFullScreen.isImmersiveModeSupported()
+      .then(() => this.androidFullScreen.immersiveMode())
+      .catch((error: any) => console.log(error));
     this.currentDate = new Date().toISOString().substring(0, 10);
     this.dateFrom = this.currentDate;
     this.deviceId = this.parameter.deviceId;
@@ -125,13 +130,21 @@ export class TrackingPage {
 
 
   locationVehicle(deviceId: string, fromDate: string) {
+    const loading = this.loader.create({
+      content: "Drawing ..."
+    });
+    loading.present();
     this.vehicleProvider.locationVehicle(deviceId, fromDate)
       .then(data => {
         let locations = data['content'];
         if (locations['length'] > 0) {
           this.collectPolyLineData(locations);
+        }else {
+          loading.dismiss();
+          alert("No data in this Data!")
         }
       });
+    loading.dismiss();
   }
 
 

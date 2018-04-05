@@ -3,6 +3,7 @@ import {AlertController, LoadingController, NavController, NavParams} from 'ioni
 import {UserProvider} from "../../providers/user/user";
 import {NgForm} from "@angular/forms";
 import {HomePage} from "../home/home";
+import {AndroidFullScreen} from "@ionic-native/android-full-screen";
 
 
 @Component({
@@ -14,19 +15,22 @@ export class SigninPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public userProvider: UserProvider,
-              public loder: LoadingController,
-              public alertCtrl: AlertController) {
+              public loader: LoadingController,
+              public alertCtrl: AlertController,private androidFullScreen: AndroidFullScreen) {
   }
 
 
   ionViewDidLoad() {
+    this.androidFullScreen.isImmersiveModeSupported()
+      .then(() => this.androidFullScreen.immersiveMode())
+      .catch((error: any) => console.log(error));
     console.log('ionViewDidLoad SigninPage');
   }
 
 
   onSignin(form: NgForm) {
-    const loading = this.loder.create({
-      content: "Signing....."
+    const loading = this.loader.create({
+      content: "Signing ..."
     });
     loading.present();
     this.userProvider.sigin(form.value.username, form.value.password)

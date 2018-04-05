@@ -1,10 +1,11 @@
 import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
+import {LoadingController, NavController} from 'ionic-angular';
 import {GoogleMap, GoogleMaps, GoogleMapsEvent} from "@ionic-native/google-maps";
 import {VehicleProvider} from "../../providers/vehicle/vehicle";
 import {VehicleLocation} from "../../models/vehicleLocation";
 import {TrackingPage} from "../tracking/tracking";
 import {Vehicle} from "../../models/vehicle";
+import {AndroidFullScreen} from "@ionic-native/android-full-screen";
 
 
 const CAMERA_DEFAULT_LAT = 6.974159;
@@ -24,12 +25,17 @@ export class HomePage {
 
 
   constructor(public navCtrl: NavController,
-              private vehicleProvider: VehicleProvider) {
+              private vehicleProvider: VehicleProvider,
+              private androidFullScreen: AndroidFullScreen,
+              public loader: LoadingController) {
 
   }
 
 
   ionViewDidLoad() {
+    this.androidFullScreen.isImmersiveModeSupported()
+      .then(() => this.androidFullScreen.immersiveMode())
+      .catch((error: any) => console.log(error));
     console.log('HomePage: ionViewDidLoad');
     this.loadMap();
   }
@@ -153,12 +159,21 @@ export class HomePage {
 
 
   getVehicle(userId: string) {
+    const loading = this.loader.create({
+      content: "Loading ..."
+    });
+    loading.present();
     this.vehicleProvider.getVehicle(userId)
       .then(data => {
-
-        this.addMakers(data['content']);
+        let vehicles = data['content'];
+        if (vehicles['length'] > 0) {
+          this.addMakers(vehicles);
+        } else {
+          loading.dismiss();
+          alert("No vehicles right now!");
+        }
       });
-
+    loading.dismiss();
   }
 
 
