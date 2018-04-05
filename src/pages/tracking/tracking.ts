@@ -196,6 +196,11 @@ export class TrackingPage {
         lat: location.latitude,
         lng: location.longitude
       }
+    }).then(marker => {
+      marker.on(GoogleMapsEvent.MARKER_CLICK)
+        .subscribe(() => {
+          alert(location.createdTime);
+        });
     });
 
   }
