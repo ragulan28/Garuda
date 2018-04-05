@@ -1,0 +1,36 @@
+<ion-header>
+  
+  <ion-navbar>
+    <ion-title>Signin</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding center text-center>
+  <ion-img width="150" height="150" src="assets/imgs/logo.png"></ion-img>
+  
+  <form #f="ngForm" (ngSubmit)="onSignin(f)">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Username</ion-label>
+        <ion-input
+          type="text"
+          ngModel
+          required=""
+          name="username"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Password</ion-label>
+        <ion-input
+          type="password"
+          required
+          ngModel
+          name="password"
+        ></ion-input>
+      </ion-item>
+    </ion-list>
+    <button ion-button round block type="submit" [disabled]="!f.valid">Login</button>
+  </form>
+</ion-content>
