@@ -100,6 +100,7 @@ export class TrackingPage {
       console.log('SecondPage: map is ready...');
       this.locationVehicle(this.deviceId, this.dateFrom);
       let url = 'SenzMate/S2A/' + this.deviceId;
+      // let url = 'SenzMate/#';
       console.log(url);
       this._mqttService
         .observe(url)
@@ -139,12 +140,13 @@ export class TrackingPage {
         let locations = data['content'];
         if (locations['length'] > 0) {
           this.collectPolyLineData(locations);
+          loading.dismiss();
         }else {
           loading.dismiss();
-          alert("No data in this Data!")
+          alert("No data in this Data!");
         }
       });
-    loading.dismiss();
+
   }
 
 
@@ -157,7 +159,7 @@ export class TrackingPage {
       console.log("current");
       this.addMarker(locations[(locations.length - 1)], 'current', true);
     } else {
-      console.log("end")
+      console.log("end");
       this.addMarker(locations[(locations.length - 1)], 'end', true);
     }
 
